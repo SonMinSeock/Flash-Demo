@@ -14,6 +14,11 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use((req, res, next) => {
+  res.locals.message = req.flash("success");
+  next();
+});
+
 const Farm = require("./models/farm");
 
 mongoose
@@ -38,7 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/farms", async (req, res) => {
   const farms = await Farm.find({});
-  res.render("farms/index", { farms, message: req.flash("success") });
+  res.render("farms/index", { farms });
 });
 app.get("/farms/new", (req, res) => {
   res.render("farms/new");
